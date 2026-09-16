@@ -1,4 +1,4 @@
-//Lia M
+//Liam M
 //Autumn Tree at Sunset
 /*
 Over the semester a concept I'd like to explore the natural world through code
