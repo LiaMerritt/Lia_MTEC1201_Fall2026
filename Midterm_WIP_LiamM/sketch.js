@@ -96,6 +96,9 @@ let imgbuttonReset;
 let imgbuttonMenu;
 let imgwell;
 let imgarrow;
+let imglv1;
+let imglv2;
+let imglv3;
 //Timer
 let timerOn = 0;
 let timer = 0;
@@ -104,9 +107,11 @@ let savedTime = 0;
 let state = "title";
 let level = "no selection";
 //Selectors
-MainMenuArrow = 1;
-LevelSelectArrow = 1;
-ShopArrow = 1;
+let MainMenuArrow = 0;
+let LevelSelectArrow = 0;
+let ShopArrow = 1;
+//gamestate
+let gamelevel = 0;
 
 //Upgrade Tracker
 WatercanType = "normal";
@@ -131,6 +136,9 @@ async function setup()
     imgbuttonMenu = await loadImage("assets/ButtonMenu.png");
     imgwell = await loadImage("assets/Well.png");
     imgarrow = await loadImage("assets/Arrow.png");
+    imglv1 = await loadImage("assets/Level1.png");
+    imglv2 = await loadImage("assets/Level2.png");
+    imglv3 = await loadImage("assets/Level3.png");
 
     imageMode(CENTER);
     textAlign(CENTER);
@@ -235,7 +243,35 @@ function keyPressed()
             }
 
         }
+        
 
+    }
+        if (state == "levelSelect")
+    {
+        if(key === 'a' || key === 'A' || key === "ArrowLeft")
+        {
+            LevelSelectArrow --;
+        }
+        else if(key === 'd' || key === 'D' || key === "ArrowRight")
+        {
+            LevelSelectArrow ++;
+        }
+        else if(key === "Enter" || key === "z" || key === "Z")
+        {
+            if(LevelSelectArrow == 1)
+            {
+                state = "game"
+                gamelevel = 1;
+            }
+            else if(LevelSelectArrow == 2)
+            {
+                
+            }
+            else if(LevelSelectArrow == 3)
+            {
+                
+            }
+        }
     }
 }
 
@@ -348,6 +384,9 @@ function mousePressed()
 function title()
 {
     treedraw();
+    noStroke();
+    fill(0);
+    text("click mouse or press any button to start", width/2, height/2);
 
     if(mouseIsPressed)
     {state = "mainMenu"}
@@ -367,7 +406,8 @@ function mainMenu()
     rect(width / 2 , height * 0.88, width, height * 0.25);
 
     fill(0)
-    text("main menu, work in progress, press Enter or Z (only start game is functional as of now)", width/2, height/2);
+    text("main menu, work in progress, (only start game is functional as of now)", width/2, height/2);
+    text("current UI elements are placeholders" , width/2, height * 0.52);
 
     //Menu Buttons
     image(imgbuttonGame, width * 0.20, height * 0.90, imgbuttonGame.width*1.15, imgbuttonGame.height*1.15);
@@ -378,9 +418,9 @@ function mainMenu()
     //Button Selector
     if(MainMenuArrow > 4)
     {
-        MainMenuArrow = 1;
+        MainMenuArrow = 0;
     }
-    else if (MainMenuArrow < 1)
+    else if (MainMenuArrow < 0)
     {
         MainMenuArrow = 4;
     }
@@ -400,6 +440,11 @@ function mainMenu()
     {
         image(imgarrow, width * 0.80, height * 0.80, imgarrow.width *0.75,  imgarrow.height *0.75);
     }
+    else if(MainMenuArrow == 0)
+    {
+        noStroke();
+        text("Move with WASD or Arrow Keys, Select with Enter or Z", width /2 ,height * 0.98);
+    }
 
 }
 
@@ -407,9 +452,39 @@ function levelSelect()
 {
     background(155);
     fill(0)
-    text("level select, work in progress, press mouse", width/2, height/2);
-    
-    
+    text("level select, work in progress, (only level 1 is functional as of now)", width/2, height * 0.2);
+    text("level themes may change in final version, images are placeholders", width/2, height * 0.3);
+
+    if(LevelSelectArrow > 3)
+    {
+        LevelSelectArrow = 0;
+    }
+    else if (LevelSelectArrow < 0)
+    {
+        LevelSelectArrow = 3;
+    }
+    if(LevelSelectArrow == 1)
+    {
+        image(imgarrow, width * 0.23, height * 0.28);
+    }
+    else if(LevelSelectArrow == 2)
+    {
+        image(imgarrow, width * 0.50, height * 0.28);
+    }
+    else if(LevelSelectArrow == 3)
+    {
+        image(imgarrow, width * 0.77, height * 0.28);
+    }
+    else if(LevelSelectArrow == 0)
+    {
+        noStroke();
+        text("Move with WASD or Arrow Keys, Select with Enter or Z", width /2 ,height * 0.75);
+    }
+
+    image(imglv1, width * 0.23, height /2);
+    image(imglv2, width * 0.50, height /2);
+    image(imglv3, width * 0.77, height /2);
+
     if(mouseIsPressed)
     {state = "game"}
 }
@@ -579,7 +654,7 @@ function game()
     plant(column1, row2, p3stage, t3r, t3g, t3b, tsize3);
     plant(column2, row2, p4stage, t4r, t4g, t4b, tsize4);
 
-    timerFun();
+    timerFun(30);
 
     //Image cursor based on tool
     if(watercan == 1)
@@ -650,7 +725,7 @@ function treedraw()
         ellipse(525, 100, 225, 190);
 }
 
-function timerFun()
+function timerFun(tgoal)
 {
  currentTime = millis();
     if(timerOn == 1)
@@ -670,7 +745,7 @@ function timerFun()
         {
             timerOn = 0;
         }
-        if(timerscore >= 30)
+        if(timerscore >= tgoal)
         {
         fill(189, 186, 244);
         textSize(30);
