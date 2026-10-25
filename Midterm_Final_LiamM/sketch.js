@@ -140,6 +140,8 @@ let imgmanual2;
 let imgmanual3;
 let imgmanual4;
 let imgmanual5;
+let imgconfetti;
+let imgcongrats;
 //Timer
 let timerOn = 0;
 let timer = 0;
@@ -181,7 +183,7 @@ let watercanimg;
 let unfullwatercanimg;
 let basketimg;
 let bwait = 1000;
-let maxwaterlevel = 10;
+let maxwaterlevel = 15;
 let growr1 = 1;
 let growr2 = 20;
 let tnum = 0;
@@ -245,6 +247,8 @@ async function setup()
     imgmanual3 = await loadImage("assets/Manual3.png");
     imgmanual4 = await loadImage("assets/Manual4.png");
     imgmanual5 = await loadImage("assets/Manual5.png");
+    imgconfetti = await loadImage("assets/Confetti.png");
+    imgcongrats = await loadImage("assets/Congrats.png");
 
     imageMode(CENTER);
     textAlign(CENTER);
@@ -786,19 +790,21 @@ function mainMenu()
    
     treedraw();
 
+    if(lv3status == "complete")
+    {
+        //textSize(28);
+        //fill(255, 99, 99);
+        //stroke(244, 229, 175);
+           //text("Congratulations!!! You beat every level! Thank you for playing!",width/2, height/2)
+        image(imgconfetti, width/2, height/2)
+        image(imgcongrats, width/2, height * 0.40)
+     }
+
     fill(244, 230, 187);
     strokeWeight(3);
     stroke(200, 186, 143);
     rectMode(CENTER);
     rect(width / 2 , height * 0.88, width, height * 0.25);
-
-        if(lv3status == "complete")
-        {
-            textSize(28);
-            fill(255, 99, 99);
-            stroke(244, 229, 175);
-            text("Congratulations!!! You beat every level! Thank you for playing!",width/2, height/2)
-        }
 
     //Menu Buttons
     image(imgbuttonGame, width * 0.20, height * 0.90, imgbuttonGame.width*1.15, imgbuttonGame.height*1.15);
@@ -853,7 +859,7 @@ function levelSelect()
     }
     else if(LevelSelectArrow == 2)
     {
-        background(194, 252, 210);
+        background(177, 235, 244);
     }
     else if(LevelSelectArrow == 3)
     {
@@ -1348,14 +1354,14 @@ function shop()
 
         if (WatercanType == "normal")
         {
-            shoptext = "This is a Large Watering Can. It can hold more water than the one you have now, so it can be used 15 times before being refilled."
+            shoptext = "This is a Large Watering Can. It can hold more water than the one you have now, so it can be used 20 times before being refilled."
             noStroke();
             textSize(12)
             text("Large Watering Can (Price: 50 Coins)", width * 0.33 ,height * 0.98);
         }
         else if (WatercanType == "upgrade1")
         {
-            shoptext = "The Huge Watering Can can hold even more water that the last one! It can be used 20 times before being refilled!"
+            shoptext = "The Huge Watering Can can hold even more water that the last one! It can be used 25 times before being refilled!"
             noStroke();
             textSize(12)
             text("Huge Watering Can (Price: 200 Coins)", width * 0.33 ,height * 0.98);
@@ -1509,20 +1515,20 @@ function upgrades()
     //watercan upgrades
     if(WatercanType == "normal")
     {
-        maxwaterlevel = 10;
+        maxwaterlevel = 15;
         watercanimg = imgwatercan;
         unfullwatercanimg = imgwatercane;
     }
     else if(WatercanType == "upgrade1")
     {
-        maxwaterlevel = 15;
+        maxwaterlevel = 20;
         watercanimg = imgwatercan2;
         unfullwatercanimg = imgwatercan2e;
 
     }
     else if(WatercanType == "upgrade2")
     {
-        maxwaterlevel = 20;
+        maxwaterlevel = 25;
         watercanimg = imgwatercan3;
         unfullwatercanimg = imgwatercan3e;
 
@@ -1588,9 +1594,9 @@ function levels()
     }
     if(gamelevel == 2)
     {
-        br = 174
-        bg = 232
-        bb = 194
+        br = 170
+        bg = 222
+        bb = 230
     }
     if(gamelevel == 3)
     {
@@ -1713,6 +1719,8 @@ function shoptextsettings()
 
 function retuenToMenu()
 {
+    if(timerOn == 0)
+    {
     money += tscore;
     tscore = 0;
     timerscore = 0;
@@ -1723,6 +1731,7 @@ function retuenToMenu()
     p3stage = 0;
     p4stage = 0;
     state = "mainMenu";
+    }
 }
 
 function plant(column, row, stageID, rID, gID, bID, sizeID)
